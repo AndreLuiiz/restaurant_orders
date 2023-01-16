@@ -1,13 +1,35 @@
 class TrackOrders:
     # aqui deve expor a quantidade de estoque
+    def __init__(self):
+        self.orders = list()
+        self.customers = dict()
+
     def __len__(self):
-        pass
+        return len(self.orders)
 
     def add_new_order(self, customer, order, day):
-        pass
+        self.orders.append({customer, order, day})
+
+        if customer in self.customers.keys():
+            self.customers[customer].append((order, day))
+        else:
+            self.customers[customer] = [(order, day)]
 
     def get_most_ordered_dish_per_customer(self, customer):
-        pass
+        all_order = self.customers[customer]
+        most_ordered = all_order[0][0]
+        dishes_frequency = dict()
+
+        for dish, _ in all_order:
+            if dish not in dishes_frequency:
+                dishes_frequency[dish] = 1
+            else:
+                dishes_frequency[dish] += 1
+
+            if dishes_frequency[dish] > dishes_frequency[most_ordered]:
+                most_ordered = dish
+
+        return most_ordered
 
     def get_never_ordered_per_customer(self, customer):
         pass
