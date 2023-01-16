@@ -12,7 +12,7 @@ class TrackOrders:
     def add_new_order(self, customer, order, day):
         self.allDishes.add(order)
         self.allDays.add(day)
-        self.orders.append({customer, order, day})
+        self.orders.append((customer, order, day))
 
         if customer in self.customers.keys():
             self.customers[customer].append((order, day))
@@ -45,10 +45,40 @@ class TrackOrders:
         return never_ordered
 
     def get_days_never_visited_per_customer(self, customer):
-        pass
+        all_order = self.customers[customer]
+        days_gone = {
+            day for _, day in all_order
+        }
+
+        never_visited = self.allDays - days_gone
+        return never_visited
 
     def get_busiest_day(self):
-        pass
+        busiest_day = self.orders[0][2]
+        day_frequency = dict()
+
+        for _, _, day in self.orders:
+            if day not in day_frequency:
+                day_frequency[day] = 1
+            else:
+                day_frequency[day] += 1
+
+            if day_frequency[day] > day_frequency[busiest_day]:
+                busiest_day = day
+
+        return busiest_day
 
     def get_least_busy_day(self):
-        pass
+        least_busy_day = self.orders[0][2]
+        day_frequency = dict()
+
+        for _, _, day in self.orders:
+            if day not in day_frequency:
+                day_frequency[day] = 1
+            else:
+                day_frequency[day] += 1
+
+            if day_frequency[day] < day_frequency[least_busy_day]:
+                least_busy_day = day
+
+        return least_busy_day
